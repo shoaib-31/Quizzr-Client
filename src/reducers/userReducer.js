@@ -1,4 +1,3 @@
-// userReducer.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
@@ -8,6 +7,10 @@ const userSlice = createSlice({
     userInfo: {
       name: "Shoaib Akhtar",
       email: "shoaibakmasood@gmail.com",
+      phone: 9125216099,
+      college: "IIT Roorkee",
+      totalQuizGiven: 0,
+      totalQuizCreated: 0,
     },
   },
   reducers: {

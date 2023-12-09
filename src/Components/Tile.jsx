@@ -1,13 +1,15 @@
 import styled from "styled-components";
 import Quiz from "../assets/quiz.svg";
 const Tile = ({ data }) => {
-  const { title, date, author } = data || {};
+  const { title, date, author, created } = data || {};
   return (
     <Main>
       <Title>
         <Svg src={Quiz} /> &nbsp;&nbsp; {title}
       </Title>
-      <Date>Created At: {date}</Date>
+      <Date>
+        {created ? "Created By" : "Completed On"}: {date}
+      </Date>
       <Date>Created By: {author}</Date>
     </Main>
   );

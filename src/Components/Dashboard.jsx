@@ -9,16 +9,36 @@ const Dashboard = () => {
     <Main>
       <Latest>Latest Quizzes</Latest>
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <SeeAll
         onClick={() => {
@@ -30,13 +50,28 @@ const Dashboard = () => {
       </SeeAll>
       <Latest>Completed Quizzes</Latest>
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: false,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: false,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: false,
+        }}
       />
       <SeeAll
         onClick={() => {

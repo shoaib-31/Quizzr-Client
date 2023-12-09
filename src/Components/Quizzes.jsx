@@ -38,40 +38,100 @@ const Quizzes = () => {
       />
       <SearchButton onClick={handleSearch}>Search</SearchButton>
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
       <Tile
-        data={{ title: "React Quiz", date: "2 Jan", author: "Shoaib Akhtar" }}
+        data={{
+          title: "React Quiz",
+          date: "2 Jan",
+          author: "Shoaib Akhtar",
+          created: true,
+        }}
       />
     </Main>
   );
