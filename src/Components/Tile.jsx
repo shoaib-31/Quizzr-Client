@@ -1,9 +1,15 @@
 import styled from "styled-components";
 import Quiz from "../assets/quiz.svg";
+import { useNavigate } from "react-router-dom";
 const Tile = ({ data }) => {
+  const navigate = useNavigate();
   const { title, date, author, created } = data || {};
   return (
-    <Main>
+    <Main
+      onClick={() => {
+        navigate("quiz/instructions/123");
+      }}
+    >
       <Title>
         <Svg src={Quiz} /> &nbsp;&nbsp; {title}
       </Title>

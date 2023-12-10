@@ -9,6 +9,7 @@ import ProfileCircle from "../assets/profile-circle.svg";
 import { useSelector } from "react-redux";
 
 const Navbar = () => {
+  const quizTime = useSelector((state) => state.quiz.quizTime);
   const name = useSelector((state) => state.user.userInfo.name);
   const [current, setCurrent] = useState("");
   const location = useLocation();
@@ -27,7 +28,7 @@ const Navbar = () => {
     handleUrlChange();
   }, [location.pathname]);
   return (
-    <Container>
+    <Container show={quizTime}>
       <Company>Quizzr</Company>
       <StyledLink active={current === ""} onClick={() => setCurrent("")} to="/">
         <img style={{ width: "1.5rem", height: "1.5rem" }} src={App} />
@@ -68,7 +69,7 @@ const Navbar = () => {
   );
 };
 const Container = styled.div`
-  width: 15%;
+  width: ${(props) => (props.show ? "0" : "15%")};
   height: 100vh;
   background-color: #fff;
   display: flex;
@@ -76,6 +77,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
 `;
 const Name = styled.div`
   color: #3626b1;

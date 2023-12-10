@@ -7,7 +7,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   return (
     <Main>
-      <Latest>Latest Quizzes</Latest>
+      <BigBold>BigBold Quizzes</BigBold>
       <Tile
         data={{
           title: "React Quiz",
@@ -48,7 +48,7 @@ const Dashboard = () => {
         See All&nbsp;&nbsp;
         <img style={{ width: "2rem", height: "2rem" }} src={Arrow} />
       </SeeAll>
-      <Latest>Completed Quizzes</Latest>
+      <BigBold>Completed Quizzes</BigBold>
       <Tile
         data={{
           title: "React Quiz",
@@ -108,7 +108,7 @@ const Main = styled.div`
     background-color: #f1f1f1;
   }
 `;
-const Latest = styled.div`
+const BigBold = styled.div`
   font-size: 3rem;
   color: #757575;
   font-weight: 700;

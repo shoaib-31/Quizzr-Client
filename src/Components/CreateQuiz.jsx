@@ -107,7 +107,7 @@ const CreateQuiz = () => {
 
   return (
     <Main>
-      <Latest>Create a Quiz:</Latest>
+      <BigBold>Create a Quiz:</BigBold>
       <form onSubmit={handleCreateQuiz}>
         <Input>
           <Name>Title of Quiz:</Name>
@@ -345,7 +345,7 @@ const Name = styled.div`
   font-weight: 700;
   margin: 1rem 0;
 `;
-const Latest = styled.div`
+const BigBold = styled.div`
   font-size: 3rem;
   color: #3626b1;
   font-weight: 700;

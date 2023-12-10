@@ -40,7 +40,7 @@ const Profile = () => {
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
   return (
     <Main>
-      <Latest>Your Profile</Latest>
+      <BigBold>Your Profile</BigBold>
       <Field>
         <Label>Name:</Label>
         <Value>{name}</Value>
@@ -178,7 +178,7 @@ const Main = styled.div`
     background-color: #f1f1f1;
   }
 `;
-const Latest = styled.div`
+const BigBold = styled.div`
   font-size: 3rem;
   color: #3626b1;
   font-weight: 700;

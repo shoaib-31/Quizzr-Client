@@ -7,7 +7,7 @@ const MyQuiz = () => {
   const navigate = useNavigate();
   return (
     <Main>
-      <Latest>Quizzes you created:</Latest>
+      <BigBold>Quizzes you created:</BigBold>
       <SeeAll
         onClick={() => {
           navigate("/my-quizzes/create-quiz");
@@ -64,7 +64,7 @@ const MyQuiz = () => {
           created: true,
         }}
       />
-      <Latest>Completed Quizzes</Latest>
+      <BigBold>Completed Quizzes</BigBold>
       <Tile
         data={{
           title: "React Quiz",
@@ -132,7 +132,7 @@ const Main = styled.div`
     background-color: #f1f1f1;
   }
 `;
-const Latest = styled.div`
+const BigBold = styled.div`
   font-size: 3rem;
   color: #757575;
   font-weight: 700;

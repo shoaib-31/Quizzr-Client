@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Profile from "./Components/Profile";
 import Quizzes from "./Components/Quizzes";
 import CreateQuiz from "./Components/CreateQuiz";
+import Quiz from "./Components/Quiz";
+import Instructions from "./Components/Instructions";
 
 function App() {
   return (
@@ -17,6 +19,8 @@ function App() {
           <Route path="/my-quizzes/create-quiz" element={<CreateQuiz />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/quiz" element={<Quizzes />} />
+          <Route path="/quiz/123" element={<Quiz />} />
+          <Route path="/quiz/instructions/123" element={<Instructions />} />
         </Routes>
       </>
     </Router>

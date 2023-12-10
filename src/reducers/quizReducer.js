@@ -3,16 +3,14 @@ import { createSlice } from "@reduxjs/toolkit";
 const quizSlice = createSlice({
   name: "quiz",
   initialState: {
-    questions: [],
-    answers: [],
-    time: null,
+    quizTime: false,
   },
   reducers: {
-    clearQuestion: (state, action) => {
-      state.questions = [];
+    toggleQuiz: (state, action) => {
+      state.quizTime = !state.quizTime;
     },
   },
 });
 
-export const { clearQuestion } = quizSlice.actions;
+export const { toggleQuiz } = quizSlice.actions;
 export default quizSlice.reducer;
