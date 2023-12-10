@@ -7,6 +7,7 @@ import Quizzes from "./Components/Quizzes";
 import CreateQuiz from "./Components/CreateQuiz";
 import Quiz from "./Components/Quiz";
 import Instructions from "./Components/Instructions";
+import Submitted from "./Components/Submitted";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/quiz" element={<Quizzes />} />
           <Route path="/quiz/123" element={<Quiz />} />
           <Route path="/quiz/instructions/123" element={<Instructions />} />
+          <Route path="/submitted" element={<Submitted />} />
         </Routes>
       </>
     </Router>

@@ -64,7 +64,7 @@ const MyQuiz = () => {
           created: true,
         }}
       />
-      <BigBold>Completed Quizzes</BigBold>
+      <BigBold>Result of Completed Quizzes</BigBold>
       <Tile
         data={{
           title: "React Quiz",
