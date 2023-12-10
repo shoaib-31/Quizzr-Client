@@ -118,6 +118,13 @@ const Profile = () => {
             onChange={handleChange}
             placeholder="New College"
           />
+          <InputField
+            type="text"
+            name="newPassword"
+            value={formData.newPassword}
+            onChange={handleChange}
+            placeholder="New Password"
+          />
           <Buttons>
             <ConfirmBtn type="submit">Update</ConfirmBtn>
             <ConfirmBtn onClick={closeUpdateModal}>Cancel</ConfirmBtn>

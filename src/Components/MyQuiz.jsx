@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Tile from "./Tile";
-import Arrow from "../assets/right-arrow.svg";
+import Plus from "../assets/plus.svg";
 import { useNavigate } from "react-router-dom";
 
 const MyQuiz = () => {
@@ -8,6 +8,14 @@ const MyQuiz = () => {
   return (
     <Main>
       <Latest>Quizzes you created:</Latest>
+      <SeeAll
+        onClick={() => {
+          navigate("/my-quizzes/create-quiz");
+        }}
+      >
+        Create a Quiz&nbsp;&nbsp;
+        <img style={{ width: "2rem", height: "2rem" }} src={Plus} />
+      </SeeAll>
       <Tile
         data={{
           title: "React Quiz",
