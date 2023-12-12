@@ -1,34 +1,68 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { quizInfo } from "./quizData";
+import { useParams, useNavigate } from "react-router-dom";
 import Stopwatch from "../assets/stopwatch.svg";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import Preloader from "./Preloader";
+import { setDuration } from "../reducers/quizReducer";
+import { useDispatch } from "react-redux";
+
 const Instructions = () => {
-  const { instruction, correctMarks, wrongMarks, duration, totalQues } =
-    quizInfo;
+  const { _id } = useParams();
   const navigate = useNavigate();
+  const [quizInfo, setQuizInfo] = useState(null);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchQuizInfo = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_HOST}/quiz/instructions/${_id}`
+        );
+        const data = response.data;
+        setQuizInfo(data);
+        dispatch(setDuration(data.duration));
+      } catch (error) {
+        console.error("Error fetching quiz information", error.message);
+      }
+    };
+
+    fetchQuizInfo();
+  }, []);
+
   const handleStartQuiz = () => {
-    navigate("/quiz/123");
+    navigate(`/quiz/${_id}`);
   };
+
   return (
-    <Main>
-      <BigBold>Instructions</BigBold>
-      <Content>{instruction}</Content>
-      <Marks>
-        Positive Marks: <span style={{ color: "green" }}>{correctMarks}</span>
-      </Marks>
-      <Marks>
-        Negative Marks: <span style={{ color: "red" }}>{wrongMarks}</span>
-      </Marks>
-      <Marks>Total Marks: {correctMarks * totalQues}</Marks>
-      <Marks>
-        <img style={{ width: "2rem", height: "2rem" }} src={Stopwatch} />{" "}
-        Duration: {duration} minutes
-      </Marks>
-      <Submit onClick={handleStartQuiz}>Start Quiz</Submit>
+    <Main loading={quizInfo == null}>
+      {quizInfo ? (
+        <>
+          <BigBold>Instructions</BigBold>
+          <Content>{quizInfo.instructions}</Content>
+          <Marks>
+            Positive Marks:{" "}
+            <span style={{ color: "green" }}>{quizInfo.correctMarks}</span>
+          </Marks>
+          <Marks>
+            Negative Marks:{" "}
+            <span style={{ color: "red" }}>{quizInfo.wrongMarks}</span>
+          </Marks>
+          <Marks>
+            Total Marks: {quizInfo.correctMarks * quizInfo.totalQues}
+          </Marks>
+          <Marks>
+            <img style={{ width: "2rem", height: "2rem" }} src={Stopwatch} />{" "}
+            Duration: {quizInfo.duration} minutes
+          </Marks>
+          <Submit onClick={handleStartQuiz}>Start Quiz</Submit>
+        </>
+      ) : (
+        <Preloader />
+      )}
     </Main>
   );
 };
+
 const Submit = styled.button`
   margin: 1rem 0;
   background-color: #4735ce;
@@ -44,22 +78,26 @@ const Submit = styled.button`
     background-color: #3626b1;
   }
 `;
+
 const BigBold = styled.div`
   font-size: 3rem;
   color: #757575;
   font-weight: 700;
   margin-bottom: 1rem 0;
 `;
+
 const Content = styled.div`
   font-size: 1.5rem;
   margin: 1rem 0;
 `;
+
 const Marks = styled.div`
   font-size: 1rem;
   display: flex;
   align-items: center;
   margin: 0.5rem 0;
 `;
+
 const Main = styled.div`
   background-color: white;
   width: 70%;
@@ -68,6 +106,8 @@ const Main = styled.div`
   border-radius: 1rem 0 0 1rem;
   height: 90%;
   display: flex;
+  justify-content: ${(props) => (props.loading ? "center" : "flex-start")};
+  align-items: ${(props) => (props.loading ? "center" : "flex-start")};
   flex-direction: column;
   overflow-y: scroll;
   &::-webkit-scrollbar {
@@ -85,4 +125,11 @@ const Main = styled.div`
     background-color: #f1f1f1;
   }
 `;
+
+const Loading = styled.div`
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 2rem;
+`;
+
 export default Instructions;

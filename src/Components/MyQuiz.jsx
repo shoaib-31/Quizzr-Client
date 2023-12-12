@@ -1,113 +1,69 @@
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Tile from "./Tile";
 import Plus from "../assets/plus.svg";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"; // Import Axios
+import Preloader from "./Preloader";
 
 const MyQuiz = () => {
+  const [createdQuizzes, setCreatedQuizzes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [completedQuizzes, setCompletedQuizzes] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCreatedQuizzes = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_HOST}/quiz/getCreatedQuiz`
+        );
+        setCreatedQuizzes(response.data);
+        console.log(response.data);
+      } catch (error) {
+        console.error("Error fetching created quizzes", error.message);
+      }
+
+      const resultsResponse = await axios.get(
+        `${import.meta.env.VITE_HOST}/results/getAllResults`
+      );
+      const sortedResults = resultsResponse.data.sort((a, b) => {
+        return new Date(b.dateCreated) - new Date(a.dateCreated);
+      });
+      setCompletedQuizzes(sortedResults);
+      setLoading(false);
+    };
+    fetchCreatedQuizzes();
+  }, []);
+
   return (
-    <Main>
-      <BigBold>Quizzes you created:</BigBold>
-      <SeeAll
-        onClick={() => {
-          navigate("/my-quizzes/create-quiz");
-        }}
-      >
-        Create a Quiz&nbsp;&nbsp;
-        <img style={{ width: "2rem", height: "2rem" }} src={Plus} />
-      </SeeAll>
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: true,
-        }}
-      />
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: true,
-        }}
-      />
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: true,
-        }}
-      />
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: true,
-        }}
-      />
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: true,
-        }}
-      />
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: true,
-        }}
-      />
-      <BigBold>Result of Completed Quizzes</BigBold>
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: false,
-        }}
-      />
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: false,
-        }}
-      />
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: false,
-        }}
-      />
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: false,
-        }}
-      />
-      <Tile
-        data={{
-          title: "React Quiz",
-          date: "2 Jan",
-          author: "Shoaib Akhtar",
-          created: false,
-        }}
-      />
+    <Main loading={loading}>
+      {loading ? (
+        <Preloader />
+      ) : (
+        <>
+          <BigBold>Quizzes you created:</BigBold>
+          <SeeAll
+            onClick={() => {
+              navigate("/my-quizzes/create-quiz");
+            }}
+          >
+            Create a Quiz&nbsp;&nbsp;
+            <img style={{ width: "2rem", height: "2rem" }} src={Plus} />
+          </SeeAll>
+          {createdQuizzes.map((quiz) => (
+            <Tile key={quiz._id} created={true} data={quiz} />
+          ))}
+          <BigBold>Completed Quizzes</BigBold>
+          {completedQuizzes.map((quiz) => (
+            <Tile key={quiz.id} data={quiz} />
+          ))}
+        </>
+      )}
     </Main>
   );
 };
+
 const Main = styled.div`
   background-color: white;
   width: 70%;
@@ -115,6 +71,9 @@ const Main = styled.div`
   padding: 2rem;
   border-radius: 1rem 0 0 1rem;
   height: 90%;
+  display: flex;
+  justify-content: ${(props) => (props.loading ? "center" : "flex-start")};
+  align-items: ${(props) => (props.loading ? "center" : "flex-start")};
   flex-direction: column;
   overflow-y: scroll;
   &::-webkit-scrollbar {

@@ -8,23 +8,33 @@ import CreateQuiz from "./Components/CreateQuiz";
 import Quiz from "./Components/Quiz";
 import Instructions from "./Components/Instructions";
 import Submitted from "./Components/Submitted";
+import { useSelector } from "react-redux";
+import LoginPage from "./Components/LoginPage";
+import Result from "./Components/Result";
 
 function App() {
+  const user = useSelector((state) => state.user);
+
   return (
     <Router>
-      <>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/my-quizzes" element={<MyQuiz />} />
-          <Route path="/my-quizzes/create-quiz" element={<CreateQuiz />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/quiz" element={<Quizzes />} />
-          <Route path="/quiz/123" element={<Quiz />} />
-          <Route path="/quiz/instructions/123" element={<Instructions />} />
-          <Route path="/submitted" element={<Submitted />} />
-        </Routes>
-      </>
+      {user.isLoggedIn ? (
+        <>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/my-quizzes" element={<MyQuiz />} />
+            <Route path="/my-quizzes/create-quiz" element={<CreateQuiz />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/quiz" element={<Quizzes />} />
+            <Route path="/quiz/:_id" element={<Quiz />} />
+            <Route path="/result/:_id" element={<Result />} />
+            <Route path="/quiz/instructions/:_id" element={<Instructions />} />
+            <Route path="/submitted" element={<Submitted />} />
+          </Routes>
+        </>
+      ) : (
+        <LoginPage />
+      )}
     </Router>
   );
 }

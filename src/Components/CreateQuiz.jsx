@@ -9,6 +9,7 @@ import {
 } from "react-accessible-accordion";
 import "react-accessible-accordion/dist/fancy-example.css";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const CreateQuiz = () => {
   const navigate = useNavigate();
@@ -91,16 +92,22 @@ const CreateQuiz = () => {
       ],
     }));
   };
-  const handleCreateQuiz = (e) => {
-    e.preventDefault(); // Prevents the default form submission behavior
+  const handleCreateQuiz = async (e) => {
+    e.preventDefault();
 
-    // Check form validity
     if (e.target.checkValidity()) {
-      // Valid form, proceed with your logic
-      console.log(quizInfo);
-      navigate("/my-quizzes");
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_HOST}/quiz/create`,
+          quizInfo
+        );
+        console.log(response.data);
+        navigate("/my-quizzes");
+        window.location.reload();
+      } catch (error) {
+        console.error("Error creating quiz", error.message);
+      }
     } else {
-      // Invalid form, display error messages or handle accordingly
       console.log("Form is invalid");
     }
   };

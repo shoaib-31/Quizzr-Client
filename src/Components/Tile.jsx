@@ -1,20 +1,33 @@
 import styled from "styled-components";
 import Quiz from "../assets/quiz.svg";
 import { useNavigate } from "react-router-dom";
-const Tile = ({ data }) => {
+import { format } from "date-fns-tz";
+
+const convertMongoDate = (mongoDate) => {
+  const formattedDate = format(new window.Date(mongoDate), "dd-MM-yyyy", {
+    timeZone: "Asia/Kolkata",
+  });
+  return formattedDate;
+};
+
+const Tile = ({ data, created }) => {
   const navigate = useNavigate();
-  const { title, date, author, created } = data || {};
+  const { title, dateCompleted, createdDate, resultId, author, _id } =
+    data || {};
+  console.log(createdDate);
   return (
     <Main
       onClick={() => {
-        navigate("quiz/instructions/123");
+        navigate(created ? `/quiz/instructions/${_id}` : `/result/${resultId}`);
       }}
     >
       <Title>
         <Svg src={Quiz} /> &nbsp;&nbsp; {title}
       </Title>
       <Date>
-        {created ? "Created By" : "Completed On"}: {date}
+        {created
+          ? `Created On : ${convertMongoDate(createdDate)}`
+          : `Completed On :${convertMongoDate(dateCompleted)}`}
       </Date>
       <Date>Created By: {author}</Date>
     </Main>

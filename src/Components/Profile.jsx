@@ -5,9 +5,13 @@ import Setting from "../assets/setting.svg";
 import styled from "styled-components";
 import { useState } from "react";
 import Modal from "./Modal";
+import { logout, updateUser } from "../reducers/userReducer";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user.userInfo);
   const { name, email, phone, college, totalQuizGiven, totalQuizCreated } =
     user;
@@ -17,27 +21,51 @@ const Profile = () => {
   const openUpdateModal = () => setUpdateModalOpen(true);
   const closeUpdateModal = () => setUpdateModalOpen(false);
   const [formData, setFormData] = useState({
-    newName: name,
-    newEmail: email,
-    newPhone: phone,
-    newCollege: college,
-    newPassword: "",
+    name: name,
+    email: email,
+    phone: phone,
+    college: college,
+    password: "",
   });
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [name]: value,
+    }));
+  };
+  const updateUserOnServer = async (userData) => {
+    try {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_HOST}/user`,
+        userData
+      );
+      console.log("User updated successfully:", response.data);
+    } catch (error) {
+      console.error("Error updating user:", error.message);
+    }
+  };
+  const deleteUserOnServer = async () => {
+    try {
+      const response = await axios.delete(`${import.meta.env.VITE_HOST}/user`);
+      console.log("User deleted successfully:", response.data);
+      dispatch(logout());
+      document.cookie = `jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+      navigate("/");
+    } catch (error) {
+      console.error("Error deleting user:", error.message);
+    }
+  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    dispatch(updateUser({ id: user.id, ...formData }));
+    updateUserOnServer(formData);
+    closeUpdateModal();
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   dispatch(updateUser({ id: user.id, ...formData }));
-  //   closeUpdateModal();
-  // };
-
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
   return (
     <Main>
       <BigBold>Your Profile</BigBold>
@@ -73,7 +101,13 @@ const Profile = () => {
         <img style={{ width: "2rem", height: "2rem" }} src={Trash} />
         &nbsp;&nbsp; Delete Acoount
       </SeeAll>
-      <SeeAll>
+      <SeeAll
+        onClick={() => {
+          dispatch(logout());
+          document.cookie = `jwtToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+          navigate("/");
+        }}
+      >
         <img style={{ width: "2rem", height: "2rem" }} src={PowerOff} />
         &nbsp;&nbsp; Logout
       </SeeAll>
@@ -83,50 +117,52 @@ const Profile = () => {
       <Modal isOpen={isDeleteModalOpen} onClose={closeDeleteModal}>
         <h2>Are you sure want to delete your Account?</h2>
         <Buttons>
-          <ConfirmBtn>Yes</ConfirmBtn>
+          <ConfirmBtn onClick={deleteUserOnServer}>Yes</ConfirmBtn>
           <ConfirmBtn onClick={closeDeleteModal}>No</ConfirmBtn>
         </Buttons>
       </Modal>
       <Modal isOpen={isUpdateModalOpen} onClose={closeUpdateModal}>
-        <UpdateAccountForm>
+        <UpdateAccountForm onSubmit={handleSubmit}>
           <h2>Update Account</h2>
           <InputField
             type="text"
-            name="newName"
-            value={formData.newName}
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             placeholder="New Name"
           />
           <InputField
             type="email"
-            name="newEmail"
-            value={formData.newEmail}
+            name="email"
+            value={formData.email}
             onChange={handleChange}
             placeholder="New Email"
           />
           <InputField
             type="tel"
-            name="newPhone"
-            value={formData.newPhone}
+            name="phone"
+            value={formData.phone}
             onChange={handleChange}
             placeholder="New Phone"
           />
           <InputField
             type="text"
-            name="newCollege"
-            value={formData.newCollege}
+            name="college"
+            value={formData.college}
             onChange={handleChange}
             placeholder="New College"
           />
           <InputField
             type="text"
-            name="newPassword"
-            value={formData.newPassword}
+            name="password"
+            value={formData.password}
             onChange={handleChange}
             placeholder="New Password"
           />
           <Buttons>
-            <ConfirmBtn type="submit">Update</ConfirmBtn>
+            <ConfirmBtn onClick={handleSubmit} type="submit">
+              Update
+            </ConfirmBtn>
             <ConfirmBtn onClick={closeUpdateModal}>Cancel</ConfirmBtn>
           </Buttons>
         </UpdateAccountForm>

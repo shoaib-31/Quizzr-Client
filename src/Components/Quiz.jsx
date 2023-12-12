@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import { toggleQuiz } from "../reducers/quizReducer";
-import { questions, quizInfo } from "./quizData";
 import Countdown from "react-countdown-now";
 import Stopwatch from "../assets/stopwatch.svg";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+import Preloader from "./Preloader";
 
 const Quiz = () => {
   const navigate = useNavigate();
-  const { duration } = quizInfo;
+  const { _id } = useParams();
+  const [loading, setLoading] = useState(true);
+  const duration = useSelector((state) => state.quiz.duration);
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const temp = [];
-  for (let i = 0; i < questions.length; i++) {
-    temp.push(null);
-  }
-  const [answers, setAnswers] = useState(temp);
+  const [questions, setQuestions] = useState([]);
+  const [answers, setAnswers] = useState([]);
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -36,18 +36,37 @@ const Quiz = () => {
     setAnswers(updatedAnswers);
   };
 
-  const handleSubmit = () => {
-    console.log("Submitted Answers:", answers);
+  const handleSubmit = async () => {
+    const submitted = await axios.post(
+      `${import.meta.env.VITE_HOST}/results/submitQuiz/${_id}`,
+      { answers }
+    );
+    navigate("/submitted");
+    window.location.reload();
   };
 
   const handleTimerComplete = () => {
-    console.log("Timer completed!");
     handleSubmit();
     navigate("/submitted");
   };
   const [endTime, setEndTime] = useState(Date.now() + duration * 60 * 1000);
 
   useEffect(() => {
+    const fetchQuizDetails = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_HOST}/quiz/${_id}`
+        );
+        setQuestions(response.data);
+        const updatedAnswers = new Array(response.data.length).fill(null);
+        setAnswers(updatedAnswers);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching quiz details", error.message);
+      }
+    };
+
+    fetchQuizDetails();
     dispatch(toggleQuiz());
     return () => {
       dispatch(toggleQuiz());
@@ -55,62 +74,68 @@ const Quiz = () => {
   }, [dispatch]);
 
   return (
-    <Main>
-      <QuesIndex>
-        {currentQuestion + 1}/{questions.length}
-      </QuesIndex>
-      <Question>{questions[currentQuestion].question}</Question>
-      <Options>
-        {questions[currentQuestion].options.map((option, index) => {
-          return (
-            <StyledLabel key={index}>
-              <Option
-                type="radio"
-                name={`Option-${index + 1}`}
-                value={option}
-                checked={answers[currentQuestion] === option}
-                onChange={() => {
-                  const updatedAnswers = [...answers];
-                  updatedAnswers[currentQuestion] = option;
-                  setAnswers(updatedAnswers);
-                }}
-              />
-              {questions[currentQuestion].options[index]}
-            </StyledLabel>
-          );
-        })}
-      </Options>
-      <CountdownContainer>
-        <Countdown
-          date={endTime}
-          onComplete={handleTimerComplete}
-          renderer={({ hours, minutes, seconds }) => (
-            <Timer>
-              <img
-                style={{ width: "2rem", height: "2rem" }}
-                src={Stopwatch}
-                alt="Stopwatch"
-              />
-              &nbsp;
-              {hours > 0 && `${hours}:`}
-              {`${minutes}:${seconds}`}
-            </Timer>
-          )}
-        />
-      </CountdownContainer>
-      <ButtonContainer>
-        <Button onClick={handleClear}>Clear</Button>
-        <Button onClick={handlePrevious} disabled={currentQuestion === 0}>
-          Previous
-        </Button>
-        <Button
-          onClick={handleNext}
-          disabled={currentQuestion === questions.length - 1}
-        >
-          Next
-        </Button>
-        <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
-      </ButtonContainer>
+    <Main loading={loading}>
+      {loading ? (
+        <Preloader />
+      ) : (
+        <>
+          <QuesIndex>
+            {currentQuestion + 1}/{questions.length}
+          </QuesIndex>
+          <Question>{questions[currentQuestion].question}</Question>
+          <Options>
+            {questions[currentQuestion].options.map((option, index) => {
+              return (
+                <StyledLabel key={index}>
+                  <Option
+                    type="radio"
+                    name={`Option-${index + 1}`}
+                    value={option}
+                    checked={answers[currentQuestion] === option}
+                    onChange={() => {
+                      const updatedAnswers = [...answers];
+                      updatedAnswers[currentQuestion] = option;
+                      setAnswers(updatedAnswers);
+                    }}
+                  />
+                  {questions[currentQuestion].options[index]}
+                </StyledLabel>
+              );
+            })}
+          </Options>
+          <CountdownContainer>
+            <Countdown
+              date={endTime}
+              onComplete={handleTimerComplete}
+              renderer={({ hours, minutes, seconds }) => (
+                <Timer>
+                  <img
+                    style={{ width: "2rem", height: "2rem" }}
+                    src={Stopwatch}
+                    alt="Stopwatch"
+                  />
+                  &nbsp;
+                  {hours > 0 && `${hours}:`}
+                  {`${minutes}:${seconds}`}
+                </Timer>
+              )}
+            />
+          </CountdownContainer>
+          <ButtonContainer>
+            <Button onClick={handleClear}>Clear</Button>
+            <Button onClick={handlePrevious} disabled={currentQuestion === 0}>
+              Previous
+            </Button>
+            <Button
+              onClick={handleNext}
+              disabled={currentQuestion === questions.length - 1}
+            >
+              Next
+            </Button>
+            <SubmitButton onClick={handleSubmit}>Submit</SubmitButton>
+          </ButtonContainer>
+        </>
+      )}
     </Main>
   );
 };
@@ -161,6 +186,8 @@ const Main = styled.div`
   height: 90%;
   position: relative;
   display: flex;
+  justify-content: ${(props) => (props.loading ? "center" : "flex-start")};
+  align-items: ${(props) => (props.loading ? "center" : "flex-start")};
   overflow-x: hidden;
   flex-direction: column;
   overflow-y: scroll;
