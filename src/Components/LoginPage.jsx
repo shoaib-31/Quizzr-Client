@@ -55,6 +55,7 @@ const LoginPage = () => {
         );
         alert("Signup Successful, Login to continue!");
         setSignUp(false);
+        window.location.reload();
       } else {
         response = await axios.post(`${import.meta.env.VITE_HOST}/auth/login`, {
           email,
